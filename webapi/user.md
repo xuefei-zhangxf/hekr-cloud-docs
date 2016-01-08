@@ -46,7 +46,6 @@ curl -v -X POST \
 ```
 < 201
 < 创建的偏好数据
-
 ```
 
 ### 1.3 获取用户偏好设置
@@ -68,6 +67,20 @@ curl -v -X GET \
   "kv2": "data2",
   ...
 }
+```
+若mid为空则
+```
+< 200
+< {
+    "mid1": {
+        "kv1": "data1",
+        "kv2": "data2",
+        ...
+    },
+    "mid2" : {
+        ...
+    },
+   }
 ```
 
 ### 1.4 修改用户偏好设置
@@ -96,21 +109,22 @@ curl -v -X PUT/PATCH \
 
 ### 1.5 获取告警信息
 ```
+不指定page和size则默认最多返回最新50条记录
 curl -v -X GET \
   ... \
   "http://webapi.hekr.me/user/warnings?waringId=123,456,789&startTime=xxx&endTime=xxx&devTid=1234&mid=midxxx&page=1&size=20"
 ```
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
-|:--------|:--------:|:--------:|---------:|:-----------------------------|
+|:--------|:--------:|:--------:|:--------:|:-----------------------------|
 |warningId|  true    |  string  |          | 告警id,多个使用逗号分隔    |
 | devTid  |  true    |  string  |          | 设备唯一id                   |
 | groupId |  true    |  string  |          | 设备群组id                   |
 | mid     |  true    |  string  |          | 设备型号id                   |
 |startTime|  true    |  long    |          | 查询起始时间,毫秒时间戳        |
 |endTime  |  true    |  long    |          | 查询结束时间,毫秒时间戳        |
-| page    |  true    |  int     |          | 分页参数                     |
-| size    |  true    |  int     |          | 分页参数                     |
+| page    |  true    |  int     |   [1,?]  | 分页参数                     |
+| size    |  true    |  int     |   [1,50] | 分页参数                     |
 #### 返回
 ```
 < 200
@@ -124,7 +138,7 @@ curl -v -X GET \
 ```
 
 
-### 1.6 设备上报数据统计查询
+### 1.6 设备参数统计查询
 ```
 curl -v -X GET \
   ... \
@@ -133,16 +147,14 @@ curl -v -X GET \
 ```
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
-|:--------|:--------:|:--------:|---------:|:-----------------------------|
+|:--------|:--------:|:--------:|:---------|:-----------------------------|
 | userId  |  false   |  string  |          | 用户唯一id                  |
 | devTid  |  false   |  string  |          | 设备唯一id                   |
-| method  |  false   |  string  |          | 查询方法                     |
+| method  |  false   |  string  |['MAX','MIN','AVG','SUM','COUNT']| 统计方法 |
 | mid     |  false   |  string  |          | 查询设备的型号id              |
 | dataTag |  false   |  string  |          | 查询数据的标签                |
 |startTime|  true    |  long    |          | 查询起始时间,毫秒时间戳        |
 |endTime  |  true    |  long    |          | 查询结束时间,毫秒时间戳        |
-| page    |  true    |  int     |          | 分页参数                     |
-| size    |  true    |  int     |          | 分页参数                     |
 
 #### 返回
 ```
@@ -152,13 +164,13 @@ curl -v -X GET \
   "interval": 20,
   "page" : 1,
   "size" : 20,
-  "value": [
+  "value": \[
     {
       "time": xxx,
       "value" : 22,
       ...
     },...
-  ]
+  \],
 }
 ```
 

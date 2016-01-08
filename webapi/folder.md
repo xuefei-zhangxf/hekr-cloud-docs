@@ -36,7 +36,7 @@ curl -v -X GET \
     {
       "folderId" : "xxxx",
       "folderName" : "xxx",
-      "deviceList" : ["tid1", "tid2", "tid3"]
+      "deviceList" : ["ESP_xxx1", "ESP_xxx2", "ESP_xxx3"]
       ...
     },...
 ]

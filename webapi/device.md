@@ -41,8 +41,13 @@ curl -v -X GET \
       "deviceName": "玩具001",
       "folderId": "fid1234",
       "folderName": "客厅",
-      "groupId" : "gid1234",     *4.1版本支持*
-      "groupName" : "联动小组001", *4.1版本支持* 
+      "groupInfo" : [
+        {
+            *4.1版本支持*
+            "groupId" : "gid1234",
+            "groupName" : "联动小组001"
+        },...
+      ]
       "binVersion": "3.0.a",
       "SSID" : "NETGEAR48-5G",
       "lastLoginTime": "2016-01-06T12:00:00Z",
