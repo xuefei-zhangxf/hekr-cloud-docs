@@ -70,6 +70,10 @@ curl -v -X GET \
 ```
 < 200
 < {
+    "global": {
+        "kv1": "data1",
+        "kv2" : "data2",
+    },
     "mid1": {
         "kv1": "data1",
         "kv2": "data2",
@@ -251,7 +255,7 @@ curl -v -X GET \
 | userId  |  false   |  string  |          | 用户唯一id                  |
 | method  |  false   |  string  |          | 查询方法                     |
 | mid     |  true   |  string  |          | 查询设备的型号id              |
-| method  |  false   |  string  |  ['MAX','MIN','AVG','SUM','COUNT']|        | 查询方法                     |
+| method  |  false   |  string  |  ['MAX','MIN','AVG','SUM','COUNT']|查询方法|
 | dataTag |  false   |  string  |          | 查询数据的标签                |
 |startTime|  true    |  long    |          | 查询起始时间,毫秒时间戳        |
 |endTime  |  true    |  long    |          | 查询结束时间,毫秒时间戳        |
