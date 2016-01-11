@@ -1,13 +1,15 @@
-# 云端4.0 webapi 文档草稿-分组管理
+# 云端4.0 webapi 文档草稿-目录管理
 ## 注意
 > 以下示例中均忽略http请求头部信息以及AWT认证等信息
 设备群组(group)本期内并不添加,故文档暂不涉及
 
-## 1.分组管理
-### 1.1 添加文件夹
+## 1.目录管理
+### 1.1 添加目录
+一个用户最多只能建立128个目录
 ```
 curl -v -X POST \
   ... \
+  -H "Content-Type: text/plain" \
   "http://webapi.hekr.me/folder" \
   -d "folderName"
 ```
@@ -17,7 +19,7 @@ curl -v -X POST \
 < 同1.2返回
 ```
 
-### 1.2 列举分组(设备资源浏览器 deviceExplorer)
+### 1.2 列举目录(设备资源浏览器 deviceExplorer)
 ```
 curl -v -X GET \
   ... \
@@ -42,10 +44,12 @@ curl -v -X GET \
 ]
 ```
 
-### 1.3 修改文件夹名称
+### 1.3 修改目录名称
+目录的名称最长不得超过128个字符
 ```
 curl -v -X PUT \
   ... \
+  -H "Content-Type: text/plain" \
   "http://webapi.hekr.me/folder/{folderId}" \
   -d "newFolderName"
 ```
@@ -55,7 +59,7 @@ curl -v -X PUT \
 < 同1.2
 ```
 
-### 1.4 删除文件夹
+### 1.4 删除目录
 目录下有设备也可以删除,后续动作是把这些设备挪到根目录下
 ```
 curl -v -X DELETE \
@@ -68,11 +72,13 @@ curl -v -X DELETE \
 < 同1.2
 ```
 
-### 1.5 将设备挪到指定文件夹
+### 1.5 将设备挪到指定目录
+一个目录下最多可以放置512个设备(含根目录)
 设备可以存在在根目录也可以存在在其他目录中
 ```
 curl -v -X POST \
   ... \
+  -H "Content-Type: text/plain" \
   "http://webapi.hekr.me/folder/{folderId}" \
   -d "devTid"
 ```
@@ -82,7 +88,7 @@ curl -v -X POST \
 < 同1.2返回
 ```
 
-### 1.6 将设备从文件夹挪到根目录下
+### 1.6 将设备从目录挪到根目录下
 ```
 curl -v -X DELETE \
   ... \

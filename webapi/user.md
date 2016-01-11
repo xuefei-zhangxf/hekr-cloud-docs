@@ -2,8 +2,6 @@
 ## 注意
 > 以下示例中均忽略http请求头部信息以及AWT认证等信息
 
-必须有pid,mid可有可无
-
 
 
 ## 1.用户管理
@@ -102,7 +100,7 @@ curl -v -X PUT/PATCH \
 ```
 < 204
 < {
-  "kv1": "data1",
+    "kv1": "data1",
   ....
 }
 ```
@@ -128,17 +126,23 @@ curl -v -X GET \
 #### 返回
 ```
 < 200
-< [
-  {
-    "warningId": "xxxx",
-    "devTid" : "xxx",
-    "content": "xxx",
-  }
-]
+< {
+    "page": 1,
+    "size" : 20,
+    "valueList" : [
+      {
+        "warningId": "xxxx",
+        "devTid" : "xxx",
+        "content": "xxx",
+      },...
+  ]
+}
 ```
 
 
 ### 1.6 设备参数统计查询
+
+![alt text](http://zxfcmd.oss-cn-hangzhou.aliyuncs.com/%E7%BB%9F%E8%AE%A1.png "title")
 ```
 curl -v -X GET \
   ... \
@@ -160,17 +164,17 @@ curl -v -X GET \
 ```
 < 200
 < {
-  "scale": 20,
-  "interval": 20,
-  "page" : 1,
-  "size" : 20,
-  "value": \[
-    {
-      "time": xxx,
-      "value" : 22,
-      ...
-    },...
-  \],
+    "scale": 20,
+    "interval": 20,
+    "page" : 1,
+    "size" : 20,
+    "valueList": \[
+        {
+          "time": xxx,
+          "value" : 22,
+          ...
+        },...
+      \],
 }
 ```
 
@@ -198,6 +202,7 @@ curl -v -X POST \
 ```
 
 ### 1.8 查询用户参数记录
+该接口用于查询记录
 ```
 curl -v -X GET \
   ...   \
@@ -220,7 +225,7 @@ curl -v -X GET \
 < {
     "page" : 1,
     "size": 20,
-    "recordList": [
+    "valueList": [
         {
           "kv1": "value1",
           "kv2" : "value2"
@@ -230,8 +235,10 @@ curl -v -X GET \
 }
 ```
 
-### 1.9 查询用户参数记录统计
+### 1.9 用户参数统计查询
 用户APP上报的记录本身部分具有值类型,该接口负责统计该类标签的数据统计
+
+![alt text](http://zxfcmd.oss-cn-hangzhou.aliyuncs.com/%E7%BB%9F%E8%AE%A1.png "title")
 ```
 curl -v -X GET \
   ... \
@@ -244,7 +251,7 @@ curl -v -X GET \
 | userId  |  false   |  string  |          | 用户唯一id                  |
 | method  |  false   |  string  |          | 查询方法                     |
 | mid     |  true   |  string  |          | 查询设备的型号id              |
-| method  |  false   |  string  |          | 查询方法                     |
+| method  |  false   |  string  |  ['MAX','MIN','AVG','SUM','COUNT']|        | 查询方法                     |
 | dataTag |  false   |  string  |          | 查询数据的标签                |
 |startTime|  true    |  long    |          | 查询起始时间,毫秒时间戳        |
 |endTime  |  true    |  long    |          | 查询结束时间,毫秒时间戳        |
@@ -255,16 +262,16 @@ curl -v -X GET \
 ```
 < 200
 < {
-  "scale": 20,
-  "interval": 20,
-  "page" : 1,
-  "size" : 20,
-  "value": [
-    {
-      "time": xxx,
-      "value" : 22,
-      ...
-    },...
+    "scale": 20,
+    "interval": 20,
+    "page" : 1,
+    "size" : 20,
+    "valueList": [
+        {
+          "time": xxx,
+          "value" : 22,
+          ...
+        },...
   ]
 }
 
@@ -284,7 +291,7 @@ curl -F "file=xxxx;type=xxx" \
 }
 ```
 
-### 1.10 列举已上传文件
+### 1.11 列举已上传文件
 ```
 curl -v -X GET \
     ... \
@@ -303,7 +310,7 @@ curl -v -X GET \
 < {
     "page" : 1,
     "size" : 20,
-    "fileList" : [
+    "valueList" : [
         {
             "fileName": xxx,
             "url": "xxxxx",
@@ -313,7 +320,7 @@ curl -v -X GET \
 }
 ```
 
-### 1.11 删除已上传的文件
+### 1.12 删除已上传的文件
 ```
 curl -v -X DELETE \
     ... \

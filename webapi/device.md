@@ -8,6 +8,7 @@
 ```
 curl -v -X POST \
   ... \
+  -H "Content-Type: text/plain" \
   "http://webapi.hekr.me/device" \
   -d "devTid"
 ```
@@ -18,6 +19,7 @@ curl -v -X POST \
 ```
 
 ### 1.2 列举设备列表
+不指定分页信息则默认返回50条记录
 ```
 curl -v -X GET \
   ... \
@@ -29,8 +31,8 @@ curl -v -X GET \
 | devTid  |  true    |  string  |          | 设备唯一id,多个使用逗号分隔    |
 | folderId|  true    |  string  |          | 设备分组id                   |
 | groupId |  true    |  string  |          | 设备群组id                   |
-| page    |  true    |  int     |          | 分页参数                     |
-| size    |  true    |  int     |          | 分页参数                     |
+| page    |  true    |  int     |  [1,?]   | 分页参数                     |
+| size    |  true    |  int     |  [1,50] | 分页参数                     |
 #### 返回
 ```
 < 200
@@ -78,6 +80,7 @@ curl -v -X DELETE \
 ```
 curl -v -X PUT \
     ... \
+    -H "Content-Type: text/plain" \
     "http://webapi.hekr.me/device/{devTid}/deviceName" \
     -d "New Name"
 ```
