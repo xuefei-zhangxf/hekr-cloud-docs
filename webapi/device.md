@@ -26,13 +26,13 @@ curl -v -X GET \
   "http://webapi.hekr.me/device?devTid=tid1234,tid22,tid55&folderId=fid1234&groupId=gid1234&page=1&size=10"
 ```
 #### 参数
-| 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
-|:--------|:--------:|:--------:|---------:|:-----------------------------|
-| devTid  |  true    |  string  |          | 设备唯一id,多个使用逗号分隔    |
-| folderId|  true    |  string  |          | 设备分组id                   |
-| groupId |  true    |  string  |          | 设备群组id                   |
-| page    |  true    |  int     |  [1,?]   | 分页参数                     |
-| size    |  true    |  int     |  [1,50] | 分页参数                     |
+| 参数名   | 是否可选 | 参数类型 | 取值范围 | 说明                        |
+|:---------|:--------:|:--------:|---------:|:----------------------------|
+| devTid   |   true   |  string  |          | 设备唯一id,多个使用逗号分隔 |
+| folderId |   true   |  string  |          | 目录id                      |
+| groupId  |   true   |  string  |          | 群id                        |
+| page     |   true   |   int    |    [1,?] | 分页参数                    |
+| size     |   true   |   int    |   [1,50] | 分页参数                    |
 #### 返回
 ```
 < 200
