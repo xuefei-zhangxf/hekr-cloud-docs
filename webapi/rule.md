@@ -30,17 +30,18 @@ curl -v -X GET \
   "http://webapi.hekr.me/eventRule?devTid=1234&ruleId=1234&page=1&size=1"
 ```
 #### 参数
-| 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
-|:--------|:--------:|:--------:|---------:|:-----------------------------|
-| devTid  |  true    |  string  |          | 设备唯一id                   |
-| ruleId  |  true    |  string  |          | 规则id                       |
-| groupId |  true    |  string  |          | 设备群组id                   |
-| size    |  true    |  int     |          | 分页参数                     |
+| 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明       |
+|:--------|:--------:|:--------:|---------:|:-----------|
+| devTid  |   true   |  string  |          | 设备唯一id |
+| ruleId  |   true   |  string  |          | 规则id     |
+| groupId |   true   |  string  |          | 设备群组id |
+| size    |   true   |   int    |          | 分页参数   |
 #### 返回
 ```
 < 200
 < [
     {
+      "ruleId" : "xxx",
       "ruleName" : "xxxx",
       "code" : "xxx",
       ...
@@ -82,7 +83,7 @@ curl -v -X DELETE \
 ```
 curl -v -X POST \
   ... \
-  "http://webapi.hekr.me/schedulerTask" \ 
+  "http://webapi.hekr.me/schedulerTask" \
   -d '{
         "devTid" : "ESP_xxx",
         "code" : "xxxxxxx",
@@ -113,7 +114,7 @@ curl -v -X POST \
         "code" : "xxx",
         "taskName" : "xxx",
         "taskType" : "LOOP",
-        "time": "13:49", *localTime,默认东八区时间 
+        "time": "13:49", *localTime,默认东八区时间
         "repeat" : ["MON","THU","SUN"],
         "timeZoneOffset" : -480,
         ....
@@ -135,14 +136,14 @@ curl -v -X GET \
 ```
 排序规则: START排在前面;最新创建的排在前面;最近编辑的排在前面
 #### 参数
-| 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
-|:--------|:--------:|:--------:|---------:|:-----------------------------|
-| devTid  |  true    |  string  |          | 设备唯一id,按其value筛选       |
-| taskId  |  true    |  string  |          | 任务id,按其value进行筛选       |
-| taskType|  true    |  string  | ['ONCE', 'LOOP'] | 任务类型,按其value进行筛选 |
-| state   |  true    |  string  | ['SCHEDULING','FROZEN']| 任务状态,按其value进行筛选|
-| page    |  true    |  int     |          | 分页参数                     |
-| size    |  true    |  int     |          | 分页参数                     |
+| 参数名   | 是否可选 | 参数类型 |                取值范围 | 说明                       |
+|:---------|:--------:|:--------:|------------------------:|:---------------------------|
+| devTid   |   true   |  string  |                         | 设备唯一id,按其value筛选   |
+| taskId   |   true   |  string  |                         | 任务id,按其value进行筛选   |
+| taskType |   true   |  string  |        ['ONCE', 'LOOP'] | 任务类型,按其value进行筛选 |
+| state    |   true   |  string  | ['SCHEDULING','FROZEN'] | 任务状态,按其value进行筛选 |
+| page     |   true   |   int    |                         | 分页参数                   |
+| size     |   true   |   int    |                         | 分页参数                   |
 #### 返回
 ```
 < 200
@@ -199,4 +200,3 @@ curl -v -X DELETE \
 < 204
 < 同1.6
 ```
-
