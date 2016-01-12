@@ -42,9 +42,7 @@ curl -v -X POST \
 #### 返回
 ```
 < 201
-< {
-    # 同1.5返回
-}
+< 同1.5返回
 ```
 
 ### 1.2 反向授权创建
@@ -95,17 +93,15 @@ curl -v -x DELETE \
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| grantor |  false   |  string  |          | 授权者uid                    |
-| grantee |  false   |  string  |          | 被授权者uid,多个使用逗号分隔    |
-| devTid  |  false   |  string  |          | 设备唯一id                   |
+| grantor |  必选   |  string  |          | 授权者uid                    |
+| grantee |  可选   |  string  |          | 被授权者uid,多个使用逗号分隔    |
+| devTid  |  必选   |  string  |          | 设备唯一id                   |
 
 
 #### 返回
 ```
 < 204
-< {
-  # 同1.5返回
-}
+< 同1.5返回
 ```
 
 ### 1.5 列举指定设备上的授权信息
@@ -119,9 +115,9 @@ curl -v -X GET \
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| grantor |  false   |  string  |          | 授权者uid                    |
-| grantee |   true   |  string  |          | 被授权者uid,多个使用逗号分隔 |
-| devTid  |  false   |  string  |          | 设备唯一id                   |
+| grantor |  必选   |  string  |          | 授权者uid                    |
+| grantee |  可选   |  string  |          | 被授权者uid,多个使用逗号分隔 |
+| devTid  |  必选   |  string  |          | 设备唯一id                   |
 
 #### 返回
 ```

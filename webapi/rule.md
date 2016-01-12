@@ -1,10 +1,13 @@
 # 云端4.0 webapi 文档草稿-规则管理
 ## 注意
 > 以下示例中均忽略http请求头部信息以及AWT认证等信息
+ruleKey 由客户端生成并保证唯一性,创建任务后无法更改
+
 
 
 ## 1.规则管理
 ### 1.1 添加事件型规则(IFTTT)
+force参数设置为true后将强制覆盖已存在的事件型规则
 ```
 curl -v -X POST \
   ... \
@@ -14,6 +17,8 @@ curl -v -X POST \
         "code" : "xxxxxxx",
         "pid" : "xxxx",
         "ruleName" : "xxxxx",
+        "ruleKey" : "xxxx",
+        "force" : true,
         ...
   }'
 ```
@@ -24,6 +29,7 @@ curl -v -X POST \
 ```
 
 ### 1.2 列举事件型规则
+若不指定分页参数,则最多返回50条记录
 ```
 curl -v -X GET \
   ... \
@@ -32,10 +38,11 @@ curl -v -X GET \
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| devTid  |  true    |  string  |          | 设备唯一id                   |
-| ruleId  |  true    |  string  |          | 规则id                       |
-| groupId |  true    |  string  |          | 设备群组id                   |
-| size    |  true    |  int     |          | 分页参数                     |
+| devTid  |  可选    |  string  |          | 设备唯一id                   |
+| ruleId  |  可选    |  string  |          | 规则id                       |
+| groupId |  可选    |  string  |          | 设备群组id                   |
+| page    |  可选    |  int     |  [1,?]        | 分页参数                     |
+| size    |  可选    |  int     |  [1,50]       | 分页参数                     |
 #### 返回
 ```
 < 200
@@ -44,6 +51,7 @@ curl -v -X GET \
       "ruleId" : "xxxx",
       "ruleName" : "xxxx",
       "code" : "xxx",
+      "ruleKey" : "xxxx",
       ...
     },...
 ]
@@ -80,6 +88,7 @@ curl -v -X DELETE \
 ```
 
 ### 1.5 添加预约任务
+force参数设置为true后将强制覆盖已存在的预约
 ```
 curl -v -X POST \
   ... \
@@ -90,6 +99,7 @@ curl -v -X POST \
         "taskName" : "xxxxx",
         "taskType" : "LOOP",
         "cronExpr" : "1 * * * *",
+        "ruleKey" : "xxxx",
         ...
   }'
 ```
@@ -102,7 +112,8 @@ curl -v -X POST \
         "taskName" : "xxx",
         "taskType" : "ONCE",
         "triggerTime" : "2016/01/07T12:00:00", * localDate,默认东八区时间
-        "timeZoneOffset" : -480, * 东八区时区偏移
+        "timeZoneOffset" : -480, * 东八区时区偏移,
+        "ruleKey" : "xxxx",
         ...
     }'
 ```
@@ -116,6 +127,7 @@ curl -v -X POST \
         "time": "13:49", *localTime,默认东八区时间 
         "repeat" : ["MON","THU","SUN"],
         "timeZoneOffset" : -480,
+        "ruleKey" : "xxxx",
         ....
     }'
 ```
@@ -128,21 +140,23 @@ curl -v -X POST \
 
 
 ### 1.6 列举预约任务
+若不指定分页信息,则最多返回50条记录
 ```
 curl -v -X GET \
   ... \
-  "http://webapi.hekr.me/schedulerTask?devTid=1234&taskId=1234&state=START&taskType=LOOP&page=1&size=1"
+  "http://webapi.hekr.me/schedulerTask?devTid=1234&taskId=1234&state=START&taskType=LOOP&ruleKey=xxxx&page=1&size=1"
 ```
 排序规则: START排在前面;最新创建的排在前面;最近编辑的排在前面
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| devTid  |  true    |  string  |          | 设备唯一id,按其value筛选       |
-| taskId  |  true    |  string  |          | 任务id,按其value进行筛选       |
-| taskType|  true    |  string  | ['ONCE', 'LOOP'] | 任务类型,按其value进行筛选 |
-| state   |  true    |  string  | ['SCHEDULING','FROZEN']| 任务状态,按其value进行筛选|
-| page    |  true    |  int     |          | 分页参数                     |
-| size    |  true    |  int     |          | 分页参数                     |
+| devTid  |  可选    |  string  |          | 设备唯一id,按其value筛选       |
+| taskId  |  可选    |  string  |          | 任务id,按其value进行筛选       |
+| taskType|  可选    |  string  | ['ONCE', 'LOOP'] | 任务类型,按其value进行筛选 |
+| state   |  可选    |  string  | ['SCHEDULING','FROZEN']| 任务状态,按其value进行筛选|
+| ruleKey |  可选    |  string  |          | 按其value进行筛选            |
+| page    |  可选    |  int     |          | 分页参数                     |
+| size    |  可选    |  int     |          | 分页参数                     |
 #### 返回
 ```
 < 200
@@ -160,6 +174,7 @@ curl -v -X GET \
       "expired" : false,
       "executeCount" : 10,
       "desc" : "我的的定时关机任务",
+      "ruleKey" : "xxxx",
       "createTime" : "2016/01/07T12:00:00", localDate,默认东八区时间
       "modifyTime" : "2016/01/07T12:00:00", localDate,默认东八区时间
       "serverTime" : "2016/01/07T12:00:00", localDate,默认东八区时间
