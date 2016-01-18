@@ -9,7 +9,7 @@
 ```
 curl -v -X GET \
   ... \
-  "http://webapi.hekr.me/user/{userId}"
+  "http://webapi.hekr.me/user"
 ```
 #### 返回
 ```
@@ -21,12 +21,27 @@ curl -v -X GET \
   "avatr" : "http://ufilexxx/xxxxx"
 }
 ```
+### 1.2 更新用户档案
+```
+curl -v -X PUT/PATCH \
+    ... \
+    "http://webapi.hekr.me/user"
+    -d '{
+        "name" : "氦氪小毛",
+        ....
+    }'
+```
+#### 返回
+```
+< 204
+< No Content
+```
 
-### 1.2 设置用户偏好
+### 1.3 设置用户偏好
 ```
 curl -v -X POST \
   ... \
-  "http://webapi.hekr.me/user/{userId}/preferences/{pid}/{mid}" \
+  "http://webapi.hekr.me/user/preferences/{mid}" \
   -d '{
         "data" : {
         "kv1": "value1",
@@ -37,8 +52,7 @@ curl -v -X POST \
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| pid     |  false   |  string  |          | 厂商id                      |
-| mid     |  true    |  string  |          | 型号id                     |
+| mid     |  可选    |  string  |          | 型号id                     |
 
 #### 返回
 ```
@@ -46,17 +60,16 @@ curl -v -X POST \
 < 创建的偏好数据
 ```
 
-### 1.3 获取用户偏好设置
+### 1.4 获取用户偏好设置
 ```
 curl -v -X GET \
   ... \
-  "http://webapi.hekr.me/user/{userId}/preferences/{pid}/{mid}"
+  "http://webapi.hekr.me/user/preferences/{mid}"
 ```
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| pid     |  false   |  string  |          | 厂商id                      |
-| mid     |  true    |  string  |          | 型号id                     |
+| mid     |  可选    |  string  |          | 型号id                     |
 #### 返回
 ```
 < 200
@@ -85,11 +98,11 @@ curl -v -X GET \
    }
 ```
 
-### 1.4 修改用户偏好设置
+### 1.5 修改用户偏好设置
 ```
 curl -v -X PUT/PATCH \
   ... \
-  "http://webapi.hekr.me/user/{userId}/preferences/{pid}/{mid}" \
+  "http://webapi.hekr.me/user/preferences/{mid}" \
   -d '{
       "kv1" : "xxx",
       ...
@@ -98,8 +111,7 @@ curl -v -X PUT/PATCH \
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| pid     |  false   |  string  |          | 厂商id                      |
-| mid     |  true    |  string  |          | 型号id                     |
+| mid     |  可选    |  string  |          | 型号id                     |
 #### 返回
 ```
 < 204
@@ -109,9 +121,9 @@ curl -v -X PUT/PATCH \
 }
 ```
 
-### 1.5 获取告警信息
+### 1.6 获取告警信息
 ```
-不指定page和size则默认最多返回最新50条记录
+不指定分页信息则默认最多返回最新50条记录
 curl -v -X GET \
   ... \
   "http://webapi.hekr.me/user/warnings?waringId=123,456,789&startTime=xxx&endTime=xxx&devTid=1234&mid=midxxx&page=1&size=20"
@@ -119,14 +131,14 @@ curl -v -X GET \
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|:--------:|:-----------------------------|
-|warningId|  true    |  string  |          | 告警id,多个使用逗号分隔    |
-| devTid  |  true    |  string  |          | 设备唯一id                   |
-| groupId |  true    |  string  |          | 设备群组id                   |
-| mid     |  true    |  string  |          | 设备型号id                   |
-|startTime|  true    |  long    |          | 查询起始时间,毫秒时间戳        |
-|endTime  |  true    |  long    |          | 查询结束时间,毫秒时间戳        |
-| page    |  true    |  int     |   [1,?]  | 分页参数                     |
-| size    |  true    |  int     |   [1,50] | 分页参数                     |
+|warningId|  可选    |  string  |          | 告警id,多个使用逗号分隔    |
+| devTid  |  可选    |  string  |          | 设备唯一id                   |
+| groupId |  可选    |  string  |          | 设备群组id                   |
+| mid     |  可选    |  string  |          | 设备型号id                   |
+|startTime|  可选    |  long    |          | 查询起始时间,毫秒时间戳        |
+|endTime  |  可选    |  long    |          | 查询结束时间,毫秒时间戳        |
+| page    |  可选    |  int     |   [1,?]  | 分页参数                     |
+| size    |  可选    |  int     |   [1,50] | 分页参数                     |
 #### 返回
 ```
 < 200
@@ -144,25 +156,23 @@ curl -v -X GET \
 ```
 
 
-### 1.6 设备参数统计查询
+### 1.7 设备参数统计查询
 
 ![alt text](http://zxfcmd.oss-cn-hangzhou.aliyuncs.com/%E7%BB%9F%E8%AE%A1.png "title")
 ```
 curl -v -X GET \
   ... \
-  "http://webapi.hekr.me/user/{userId}/deviceStatistics?devTid=1234&startTime=1111&endTime=1111&method=all&mid=xxx&dataTag=pm2.5
-  &page=1&size=20"
+  "http://webapi.hekr.me/user/deviceStatistics?devTid=1234&startTime=1111&endTime=1111&method=all&mid=xxx&dataTag=pm2.5"
 ```
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|:---------|:-----------------------------|
-| userId  |  false   |  string  |          | 用户唯一id                  |
-| devTid  |  false   |  string  |          | 设备唯一id                   |
-| method  |  false   |  string  |['MAX','MIN','AVG','SUM','COUNT']| 统计方法 |
-| mid     |  false   |  string  |          | 查询设备的型号id              |
-| dataTag |  false   |  string  |          | 查询数据的标签                |
-|startTime|  true    |  long    |          | 查询起始时间,毫秒时间戳        |
-|endTime  |  true    |  long    |          | 查询结束时间,毫秒时间戳        |
+| devTid  |  必选    |  string  |          | 设备唯一id                   |
+| method  |  必选    |  string  |['MAX','MIN','AVG','SUM','COUNT']| 统计方法 |
+| mid     |  必选    |  string  |          | 查询设备的型号id              |
+| dataTag |  必选    |  string  |          | 查询数据的标签                |
+|startTime|  必选    |  long    |          | 查询起始时间,毫秒时间戳        |
+|endTime  |  可选    |  long    |          | 查询结束时间,毫秒时间戳        |
 
 #### 返回
 ```
@@ -182,46 +192,44 @@ curl -v -X GET \
 }
 ```
 
-### 1.7 上传用户参数记录
+### 1.8 上传用户参数记录
+mid可选,例如用户需要定位到具体某个型号的详细记录
 ```
 curl -v -X POST \
   ...  \
-  "http://webapi.hekr.me/user/{userId}/customData/{pid}?mid=mid123" \
+  "http://webapi.hekr.me/user/customData?mid=mid123" \
   -d '{
-    "pm2.5": 100,
-    "drink" : 100,
-    ...
-  }'
+        "pm2.5": 100,
+        "drink" : 100,
+        "devTid" : "ESP_xxxx",
+        ...
+    }'
 ```
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| userId  |  false   |  string  |          | 用户唯一id                  |
-| pid     |  false   |  string  |          | 设备的厂商id                |
-| mid     |  true    |  string  |          | 设备的型号id                |
+| mid     |  可选    |  string  |          | 设备的型号id                |
 #### 返回
 ```
 < 201
 < 上传的数据
 ```
 
-### 1.8 查询用户参数记录
-该接口用于查询记录
+### 1.9 查询用户参数记录
+该接口用于查询记录;若不指定分页参数则默认返回最近50条记录
 ```
 curl -v -X GET \
   ...   \
-  "http://webapi.hekr.me/user/{userId}/customData/{pid}?mid=1234&startTime=111&endTime=111&page=1&size=1"
+  "http://webapi.hekr.me/user/customData?mid=1234&startTime=111&endTime=111&page=1&size=1"
 ```
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| userId  |  false   |  string  |          | 用户唯一id                  |
-| pid     |  false   |  string  |          | 设备的厂商id                |
-| mid     |  true    |  string  |          | 设备的型号id                |
-|startTime|  true    |  long    |          | 查询起始时间,毫秒时间戳        |
-|endTime  |  true    |  long    |          | 查询结束时间,毫秒时间戳        |
-| page    |  true    |  int     |          | 分页参数                     |
-| size    |  true    |  int     |          | 分页参数                     |
+| mid     |  可选    |  string  |          | 设备的型号id                |
+|startTime|  可选    |  long    |          | 查询起始时间,毫秒时间戳        |
+|endTime  |  可选    |  long    |          | 查询结束时间,毫秒时间戳        |
+| page    |  可选    |  int     |  [1,?]   | 分页参数                     |
+| size    |  可选    |  int     |  [1,50]  | 分页参数                     |
 
 #### 返回
 ```
@@ -239,28 +247,26 @@ curl -v -X GET \
 }
 ```
 
-### 1.9 用户参数统计查询
+### 1.10 用户参数统计查询
 用户APP上报的记录本身部分具有值类型,该接口负责统计该类标签的数据统计
 
 ![alt text](http://zxfcmd.oss-cn-hangzhou.aliyuncs.com/%E7%BB%9F%E8%AE%A1.png "title")
 ```
 curl -v -X GET \
   ... \
-  "http://webapi.hekr.me/user/{userId}/userStatistics?startTime=1111&endTime=1111&method=all&mid=xxx&dataTag=pm2.5
+  "http://webapi.hekr.me/user/userStatistics?startTime=1111&endTime=1111&method=all&mid=xxx&dataTag=pm2.5
   &page=1&size=20"
 ```
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| userId  |  false   |  string  |          | 用户唯一id                  |
-| method  |  false   |  string  |          | 查询方法                     |
-| mid     |  true   |  string  |          | 查询设备的型号id              |
-| method  |  false   |  string  |  ['MAX','MIN','AVG','SUM','COUNT']|查询方法|
-| dataTag |  false   |  string  |          | 查询数据的标签                |
-|startTime|  true    |  long    |          | 查询起始时间,毫秒时间戳        |
-|endTime  |  true    |  long    |          | 查询结束时间,毫秒时间戳        |
-| page    |  true    |  int     |          | 分页参数                     |
-| size    |  true    |  int     |          | 分页参数                     |
+| mid     |  可选    |  string  |          | 查询设备的型号id              |
+| method  |  必选    |  string  |  ['MAX','MIN','AVG','SUM','COUNT']|查询方法|
+| dataTag |  必选    |  string  |          | 查询数据的标签                |
+|startTime|  必选    |  long    |          | 查询起始时间,毫秒时间戳        |
+|endTime  |  可选    |  long    |          | 查询结束时间,毫秒时间戳        |
+| page    |  可选    |  int     |          | 分页参数                     |
+| size    |  可选    |  int     |          | 分页参数                     |
 
 #### 返回
 ```
@@ -281,7 +287,7 @@ curl -v -X GET \
 
 ```
 
-### 1.10 上传文件(图像/视频/音频)
+### 1.11 上传文件(图像/视频/音频)
 ```
 curl -F "file=xxxx;type=xxx" \
   "http://webapi.hekr.me/user/uploadFile"
@@ -295,19 +301,19 @@ curl -F "file=xxxx;type=xxx" \
 }
 ```
 
-### 1.11 列举已上传文件
+### 1.12 列举已上传文件
+不指定分页参数,默认最多返回50条记录
 ```
 curl -v -X GET \
     ... \
-    "http://webapi.hekr.me/user/{userId}?fileName=xxx&page=1&size=20"
+    "http://webapi.hekr.me/user/file?fileName=xxx&page=1&size=20"
 ```
 ### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| userId  |  false   |  string  |          | 用户唯一id                  |
-| fileName|  true    |  string  |          | 文件名                      |
-| page    |  true    |  int     |          | 分页参数                     |
-| size    |  true    |  int     |          | 分页参数                     |
+| fileName|  可选    |  string  |          | 文件名                      |
+| page    |  可选    |  int     | [1,?]          | 分页参数                     |
+| size    |  可选    |  int     | [1,50]     | 分页参数                     |
 #### 返回
 ```
 < 200
@@ -324,14 +330,14 @@ curl -v -X GET \
 }
 ```
 
-### 1.12 删除已上传的文件
+### 1.13 删除已上传的文件
 ```
 curl -v -X DELETE \
     ... \
-    "http://webapi.hekr.me/user/{userId}/{fileName}"
+    "http://webapi.hekr.me/user/file/{fileName}"
 ```
 #### 返回
 ```
 < 204
-< 同1.10
+< 同1.11
 ```

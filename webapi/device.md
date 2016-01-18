@@ -10,7 +10,11 @@ curl -v -X POST \
   ... \
   -H "Content-Type: text/plain" \
   "http://webapi.hekr.me/device" \
-  -d "devTid"
+  -d '{
+    "devTid": "ESP_XXXX",
+    "deviceName": "我的设备1号",
+    "desc" : "我的第一台hekr智能设备"
+  }'
 ```
 ### 返回
 ```
@@ -19,7 +23,7 @@ curl -v -X POST \
 ```
 
 ### 1.2 列举设备列表
-不指定分页信息则默认返回50条记录
+不指定分页信息则默认最多返回50条记录
 ```
 curl -v -X GET \
   ... \
@@ -28,11 +32,11 @@ curl -v -X GET \
 #### 参数
 | 参数名  | 是否可选 | 参数类型 | 取值范围 | 说明                         |
 |:--------|:--------:|:--------:|---------:|:-----------------------------|
-| devTid  |  true    |  string  |          | 设备唯一id,多个使用逗号分隔    |
-| folderId|  true    |  string  |          | 目录id                   |
-| groupId |  true    |  string  |          | 群id                   |
-| page    |  true    |  int     |  [1,?]   | 分页参数                     |
-| size    |  true    |  int     |  [1,50] | 分页参数                     |
+| devTid  |  可选    |  string  |          | 设备唯一id,多个使用逗号分隔    |
+| folderId|  可选    |  string  |          | 目录id                   |
+| groupId |  可选    |  string  |          | 群id                   |
+| page    |  可选    |  int     |  [1,?]   | 分页参数                     |
+| size    |  可选    |  int     |  [1,50] | 分页参数                     |
 #### 返回
 ```
 < 200
@@ -76,19 +80,24 @@ curl -v -X DELETE \
 < 同1.2
 ```
 
-### 1.4 更改设备名称
+### 1.4 更改设备名称/描述
+devTid不可以更改
 ```
 curl -v -X PUT \
     ... \
-    -H "Content-Type: text/plain" \
-    "http://webapi.hekr.me/device/{devTid}/deviceName" \
-    -d "New Name"
+    "http://webapi.hekr.me/device/{devTid}" \
+    -d '{
+        "deviceName" : "新的设备1",
+        "desc" : "新的设备描述"
+    }'
 ```
 #### 返回
 ```
 < 204
 < 同1.2
 ```
+
+
 
 ### 修订记录
 | 修订人 |    日期    | 备注 |
