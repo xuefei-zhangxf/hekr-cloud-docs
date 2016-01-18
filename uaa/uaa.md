@@ -1,6 +1,10 @@
 # 接口文档
-## 验证码相关API
-### 发送验证码
+## A.错误返回方式说明
+    调用接口成功统一返回 200 如需要附加信息会有返回内容，没有附加信息将为空仅有HTTP头
+    调用接口失败返回400或500 错误信息会在 body 内给出
+--------------------------------------------
+## 1.验证码相关API
+### 1.1发送验证码
 #### URL
 |请求方式|地址|规范|
 |:--|:--|:--|
@@ -15,7 +19,7 @@
 |type|String|验证码用途类型(register\|resetPassword)|
 |phoneNumber|String|用户手机号码|
 ---------------------------------------------
-### 校验验证码（返回注册使用的Token）
+### 1.2校验验证码（返回注册使用的Token）
 #### URL
 |请求方式|地址|规范|
 |:--|:--|:--|
@@ -46,8 +50,8 @@
 |token|String|注册使用的token|
 |expireTime|String|token过期时间|
 ---------------------------------------------
-## 用户相关API
-### 注册用户
+## 2.用户相关API
+### 2.1注册用户
 #### URL
 |请求方式|地址|规范|
 |:--|:--|:--|
@@ -101,7 +105,14 @@
 |:--|:--|:--|
 |uid|String|用户ID|
 ---------------------------------------------
-### 用户登录
+### 2.2用户登录（OAuth password 模式）
+    clientId 与 clientSecret 来源方式
+        1.Hekr 固有 
+            A. WEB clientId: 21000000000000000000000 | clientSecret: AN1KMF6VLGZS0XUTYE2IW7J5Q9B8H4ROC3PD
+            B. Android clientId: 22000000000000000000000 | clientSecret: OSHZBNX724KAM5Q196UIR0FTJPLG3CYEW8VD
+            C. IOS clientId: 23000000000000000000000 | clientSecret: CNVRE7364YHW1F0X2GOBAU8TDSZLKQIMP9J5
+            D. WindowsPhone clientId: 24000000000000000000000 | clientSecret: Z3FBDHGKMTOJ8S2PY190VNXQLR5AWU4I7E6C
+        2.console 生成
 #### URL
 |请求方式 |地址 |规范|
 |:--|:--|:--|
@@ -137,7 +148,7 @@
 |expires_in|String|access_token 过期时间|
 |scope|String|与登录时传值相同|
 ---------------------------------------------
-### 刷新access_token
+### 2.3刷新access_token（OAuth标准）
 #### URL
 |请求方式 |地址 |规范|
 |:--|:--|:--|
@@ -172,60 +183,20 @@
 |expires_in|String|access_token 过期时间|
 |scope|String|与登录时传值相同|
 ---------------------------------------------
-### 刷新access_token
+### 2.4重置密码
 #### URL
 |请求方式 |地址 |规范|
 |:--|:--|:--|
-|POST|http://uaa.hekr.me/uaa/oauth/token |HTTP/1.1|
-#### 请求头
-|字段 |值 |说明
-|:--|:--|:--|
-|Authorization|Basic MjMwMDAwMDAwMDpFUzVWRk5QVzQzTDZNOFJCMjdVWFExMFlaT0NHREg5S0lUQUo=|该值生成公式为Base + " " + base64("clientId" + ":" + "clientSecret")|
+|POST|http://uaa.hekr.me/uaa/resetPassword?type=phone |HTTP/1.1|
 #### 请求参数
-|key |类型及范围 |说明|
-|:--|:--|:--|
-|refresh_token|String|刷新Token|
-|grant_type|String|授权方式 填写 refresh_token|
-#### 返回结果
-```
-{
-  "access_token": "eyJhbGciOiJSUzI1NiJ9.eyJleHAiOjE0NDA4NDIyMTYsInVzZXJfbmFtZSI6IjIwMDk1NjAzNjE3IiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6ImRmMGEzMWZmLWZkZWUtNDFlNS1hMWFhLTgzYzBmZjRmMmVmMiIsImNsaWVudF9pZCI6IjIzMDAwMDAwMDAiLCJzY29wZSI6WyJyZWFkIiwidHJ1c3QiLCJ3cml0ZSJdfQ.I4eXfzQDrph1yL5lO8Ny4_dKKjlvddK6xpl--bdbvmfPAzqj56XV--gQ5KBAMpgivQmadfWtYKpvshf6LOdNq--olVAd6iZOoodkprZiX2C--6PfB2y45pOBsGrOdohat8zz5AkspDmruegt2aMQnmum_A8C9d5L7mEEAXHxf3p4rk89Rg6ah0Z0f3qokiPPCca1ROF9fUsAQ5ExZByPnDt4J3lSE6zpBEy2uWeldSExM5kOernGmcgkFgOIVNlo--9dwGhRuD5IQWyita9TR5LFTF1jGZ0i0bn--wXSmJdzOnk3TL9GNecsg15oeLnJHqbh3B8FUi_vDneM6_k2qbzrkmEw",
-  "token_type": "bearer",
-  "refresh_token": "eyJhbGciOiJSUzI1NiJ9.eyJ1c2VyX25hbWUiOiIyMDA5NTYwMzYxNyIsInNjb3BlIjpbInJlYWQiLCJ0cnVzdCIsIndyaXRlIl0sImF0aSI6ImRmMGEzMWZmLWZkZWUtNDFlNS1hMWFhLTgzYzBmZjRmMmVmMiIsImV4cCI6MTQ0MzQzMDI1NiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6IjE5NDM3YzU0LTY2MjEtNGM1Ni04Y2RlLTY3ZTgxNjc1YzQ2MyIsImNsaWVudF9pZCI6IjIzMDAwMDAwMDAifQ.flBLnFwE2DyHIISQfA6X1mxugzBJf0_GYPcCcA1JYaHUIjq2LFfjfKQnGZRdJBDmNFp2wlCMSUpV5Lzuqj1S82LeLlEaH--W7--XMdF8MZFYiN1_iVmNJOu2IwoESoUerh3zPD16IDJUqHEBDz9dDWzmxUXbmpasfOrwLGTj4eIRUo4xcbru2ASaombrdAC8HBPTTOE1_qle6edc7AMxdAXq0nOmYaJGOB03PEDPwl8KXaAPth4JyubusqNO68VxxOv358amJvt2YQpaDlIC--X5CT2nJYVrEb0apDKvamFshyC4REMHjC3tnmYjuY9G8SUzEHufgPNZIFbnP029E42DA",
-  "expires_in": 3599,
-  "scope": "read trust write",
-  "jti": "df0a31ff--fdee--41e5--a1aa--83c0ff4f2ef2"
-}
-```
-#### 返回字段说明
-|返回值字段 |字段类型 |字段说明|
-|:--|:--|:--|
-|access_token|String|授权的访问token|
-|token_type|String|与登录时传值相同，或者权限更低|
-|refresh_token|String|刷新token|
-|expires_in|String|access_token 过期时间|
-|scope|String|与登录时传值相同|
----------------------------------------------
-### 重置密码
-#### URL
-|请求方式 |地址 |规范|
-|:--|:--|:--|
-|POST|http://uaa.hekr.me/uaa/resetPassword?type=(phone\|email) |HTTP/1.1|
-#### 请求参数（type=phone）
 |key |类型及范围 |说明|
 |:--|:--|:--|
 |phoneNumber|String|用户手机号|
 |verifyCode|String|验证码|
 |pid|String|pid|
 |password|String|需要重置的密码|
-#### 请求参数（type=email）
-|key |类型及范围 |说明|
-|:--|:--|:--|
-|pid|String|pid|
-|token|String|发送重置邮件时，发送到邮件内的token|
-|password|String|需要重置的密码|
 ---------------------------------------------
-### 修改密码（需要登录）
+### 2.5修改密码（需要登录）
 #### URL
 |请求方式 |地址 |规范|
 |:--|:--|:--|
@@ -241,7 +212,7 @@
 |newPassword|String|新密码|
 |pid|String|pid|
 ---------------------------------------------
-### 修改手机（需要登录）
+### 2.6修改手机（需要登录）
 #### URL
 |请求方式 |地址 |规范|
 |:--|:--|:--|
@@ -258,18 +229,7 @@
 |verifyCode|String|验证码|
 |pid|String|pid|
 ---------------------------------------------
-### 修改邮箱
-#### URL
-|请求方式 |地址 |规范|
-|:--|:--|:--|
-|POST|http://uaa.hekr.me/uaa/changeEmail |HTTP/1.1|
-#### 请求参数
-|key |类型及范围 |说明|
-|:--|:--|:--|
-|token|String|发送到邮箱内的token|
-|pid|String|pid|
----------------------------------------------
-### 发送重置密码邮件
+### 2.7发送重置密码邮件
 #### URL
 |请求方式 |地址 |规范|
 |:--|:--|:--|
@@ -280,7 +240,7 @@
 |email|String|邮箱|
 |pid|String|pid|
 ---------------------------------------------
-### 重新发送确认邮件
+### 2.8重新发送确认邮件
 #### URL
 |请求方式 |地址 |规范|
 |:--|:--|:--|
@@ -291,26 +251,18 @@
 |email|String|邮箱|
 |pid|String|pid|
 ---------------------------------------------
-### 发送修改邮箱邮件
+### 2.9发送修改邮箱邮件（需要登录）
 #### URL
 |请求方式 |地址 |规范|
 |:--|:--|:--|
 |GET|http://uaa.hekr.me/uaa/sendChangeEmailStep1Email |HTTP/1.1|
+#### 请求头
+|字段 |值 |说明
+|:--|:--|:--|
+|Authorization|Bearer MjMwMDAwMDAwMDpFUzVWRk5QVzQzTDZNOFJCMjdVWFExMFlaT0NHREg5S0lUQUo=|登陆时返回的access_token|
 #### 请求参数
 |key |类型及范围 |说明|
 |:--|:--|:--|
 |email|String|邮箱|
-|pid|String|pid|
----------------------------------------------
-### 发送新邮箱确认邮件
-#### URL
-|请求方式 |地址 |规范|
-|:--|:--|:--|
-|GET|http://uaa.hekr.me/uaa/sendChangeEmailStep2Email |HTTP/1.1|
-#### 请求参数
-|key |类型及范围 |说明|
-|:--|:--|:--|
-|email|String|邮箱|
-|token|String|上一步发到邮箱内链接的token|
 |pid|String|pid|
 ---------------------------------------------
